@@ -6,17 +6,14 @@ function parseTime(timeString) {
 function calculateHours() {
     const input = document.getElementById('plannerInput').value;
     const timePattern = /(\d{1,2}[:h]\d{2}) - (\d{1,2}[:h]\d{2})/g;
-    const dayPattern = /(Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Lundi|Mardi|Mercredi|Jeudi|Vendredi|Samedi|Dimanche)/g;
     const lines = input.split('\n');
     let totalHours = 0;
     let output = '';
 
     lines.forEach(line => {
         let dailyHours = 0;
-        const dayMatch = line.match(dayPattern);
-        const day = dayMatch ? dayMatch[0] : `Day ${lines.indexOf(line) + 1}`;
-
         const matches = Array.from(line.matchAll(timePattern));
+
         matches.forEach(match => {
             const [_, startTime, endTime] = match;
             const startHours = parseTime(startTime.trim());
@@ -25,7 +22,7 @@ function calculateHours() {
         });
 
         if (matches.length > 0) {
-            output += `${day}: ${dailyHours.toFixed(2)} hours\n`;
+            output += `${line.match(/(Lundi|Mardi|Mercredi|Jeudi|Vendredi|Samedi|Dimanche|Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)/) || `Day ${lines.indexOf(line) + 1}`}: ${dailyHours.toFixed(2)} hours\n`;
             totalHours += dailyHours;
         }
     });
