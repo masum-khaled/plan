@@ -68,6 +68,7 @@
     button#copy {
       background-color: #FFC107;
       color: black;
+      display: none; /* Initially hidden */
     }
     .result {
       margin-top: 20px;
@@ -87,9 +88,10 @@
     <div class="buttons">
       <button id="calculate">Calculate</button>
       <button id="clear">Clear</button>
-      <button id="copy">Copy Results</button>
     </div>
+    <div id="individual-results"></div>
     <div class="result" id="result">Total Time: 0 Hours, 0 Minutes</div>
+    <button id="copy">Copy Results</button>
   </div>
 
   <script>
@@ -99,6 +101,7 @@
     const clearButton = document.getElementById('clear');
     const copyButton = document.getElementById('copy');
     const resultDiv = document.getElementById('result');
+    const individualResultsDiv = document.getElementById('individual-results');
 
     // Function to add a new line for start and end time input
     function addLine() {
@@ -107,7 +110,6 @@
       line.innerHTML = `
         <input type="time" class="start-time" placeholder="Start Time">
         <input type="time" class="end-time" placeholder="End Time">
-        <div class="line-result">0 Hours, 0 Minutes</div>
       `;
       linesContainer.appendChild(line);
     }
@@ -123,14 +125,14 @@
     // Event listener to calculate the total time
     calculateButton.addEventListener('click', () => {
       let totalMinutes = 0;
+      individualResultsDiv.innerHTML = ''; // Clear previous results
 
       const startTimeInputs = document.querySelectorAll('.start-time');
       const endTimeInputs = document.querySelectorAll('.end-time');
-      const lineResults = document.querySelectorAll('.line-result');
 
       startTimeInputs.forEach((startInput, index) => {
         const endInput = endTimeInputs[index];
-        const resultDiv = lineResults[index];
+        const resultLine = document.createElement('div');
 
         if (startInput.value && endInput.value) {
           const [startHours, startMinutes] = startInput.value.split(':').map(Number);
@@ -150,13 +152,15 @@
           // Update individual line result
           const hours = Math.floor(diffMinutes / 60);
           const minutes = diffMinutes % 60;
-          resultDiv.textContent = `${hours} Hours, ${minutes} Minutes`;
+          resultLine.textContent = `Line ${index + 1}: ${hours} Hours, ${minutes} Minutes`;
 
           // Add to total
           totalMinutes += diffMinutes;
         } else {
-          resultDiv.textContent = `0 Hours, 0 Minutes`;
+          resultLine.textContent = `Line ${index + 1}: 0 Hours, 0 Minutes`;
         }
+
+        individualResultsDiv.appendChild(resultLine);
       });
 
       // Convert total minutes to hours and minutes
@@ -164,24 +168,25 @@
       const remainingMinutes = totalMinutes % 60;
 
       resultDiv.textContent = `Total Time: ${totalHours} Hours, ${remainingMinutes} Minutes`;
+
+      // Show the copy button
+      copyButton.style.display = 'block';
     });
 
     // Event listener to clear all inputs and reset the result
     clearButton.addEventListener('click', () => {
       const inputs = document.querySelectorAll('.start-time, .end-time');
-      const lineResults = document.querySelectorAll('.line-result');
       inputs.forEach(input => input.value = '');
-      lineResults.forEach(result => result.textContent = `0 Hours, 0 Minutes`);
+      individualResultsDiv.innerHTML = '';
       resultDiv.textContent = 'Total Time: 0 Hours, 0 Minutes';
+      copyButton.style.display = 'none'; // Hide the copy button
     });
 
     // Event listener to copy results to clipboard
     copyButton.addEventListener('click', () => {
       let text = 'Individual Results:\n';
-      const lineResults = document.querySelectorAll('.line-result');
-      lineResults.forEach((result, index) => {
-        text += `Line ${index + 1}: ${result.textContent}\n`;
-      });
+      const individualResults = individualResultsDiv.textContent;
+      text += individualResults;
       text += `\n${resultDiv.textContent}`;
 
       // Copy to clipboard
