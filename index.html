@@ -198,6 +198,65 @@
                 alert('Result copied to clipboard');
             });
         }
+
+        // Manual Calculator functions (keeping your original code)
+        let lineCount = 1;
+
+        // Add new line input fields
+        document.getElementById('add-line').addEventListener('click', function() {
+            lineCount++;
+            const lineDiv = document.createElement('div');
+            lineDiv.classList.add('line');
+            lineDiv.innerHTML = `
+                <input type="text" id="start-time-${lineCount}" placeholder="Start Time">
+                <input type="text" id="end-time-${lineCount}" placeholder="End Time">
+                <button onclick="removeLine(${lineCount})">Remove</button>
+            `;
+            document.getElementById('lines-container').appendChild(lineDiv);
+        });
+
+        // Remove line input fields
+        function removeLine(lineNumber) {
+            const lineDiv = document.getElementById(`line-${lineNumber}`);
+            lineDiv.remove();
+        }
+
+        // Calculate time range for Manual Calculator
+        function calculateManual() {
+            let totalMinutes = 0;
+            for (let i = 1; i <= lineCount; i++) {
+                const startTime = document.getElementById(`start-time-${i}`).value;
+                const endTime = document.getElementById(`end-time-${i}`).value;
+
+                if (startTime && endTime) {
+                    const start = parseTime(startTime);
+                    const end = parseTime(endTime);
+
+                    if (end < start) {
+                        alert("End time cannot be earlier than start time.");
+                        return;
+                    }
+
+                    totalMinutes += (end - start);
+                }
+            }
+
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = totalMinutes % 60;
+            document.getElementById('result').innerText = `Total Time: ${hours} Hours, ${minutes} Minutes`;
+        }
+
+        // Clear input fields
+        document.getElementById('clear').addEventListener('click', function() {
+            for (let i = 1; i <= lineCount; i++) {
+                document.getElementById(`start-time-${i}`).value = '';
+                document.getElementById(`end-time-${i}`).value = '';
+            }
+            document.getElementById('result').innerText = 'Total Time: 0 Hours, 0 Minutes';
+        });
+
+        // Add event listener to the calculate button
+        document.getElementById('calculate').addEventListener('click', calculateManual);
     </script>
 </body>
 </html>
