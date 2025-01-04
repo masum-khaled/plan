@@ -1,115 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auto Hours Calculator</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            max-width: 600px;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-        }
-        textarea {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            height: 150px;
-        }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .result {
-            text-align: left;
-            margin-top: 20px;
-            white-space: pre-wrap;
-        }
-        .copy-btn {
-            width: 100%;
-            padding: 10px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        .copy-btn:hover {
-            background-color: #0056b3;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hours Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    .line {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .line input {
+      width: 45%;
+      padding: 5px;
+      font-size: 16px;
+    }
+    .buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 20px;
+      text-align: center;
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Auto Hours Calculator</h1>
-        <textarea id="inputSchedule" placeholder="Paste your schedule here"></textarea>
-        <button onclick="calculateHours()">Calculate Total Hours</button>
-        <div class="result" id="result"></div>
-        <button class="copy-btn" onclick="copyToClipboard()">Copy Result</button>
+  <div class="container">
+    <h1>Hours Calculator</h1>
+    <div id="lines-container">
+      <!-- Initial lines will be added here -->
     </div>
-<a href="a.html"/>
-    
-    <script>
-        function parseTimeRange(timeRange) {
-            const [start, end] = timeRange.split('-').map(time => {
-                if (time.includes('h')) {
-                    let [hours, minutes] = time.split('h').map(Number);
-                    if (!minutes) minutes = 0;
-                    return hours * 60 + minutes;
-                } else {
-                    const [hours, minutes] = time.split(':').map(Number);
-                    return hours * 60 + minutes;
-                }
-            });
-            return (end - start) / 60;
-        }
+    <button id="add-line">+ Add More Lines</button>
+    <div class="buttons">
+      <button id="calculate">Calculate</button>
+      <button id="clear">Clear</button>
+    </div>
+    <div class="result" id="result">Total Time: 0 Hours, 0 Minutes</div>
+  </div>
 
-        function calculateHours() {
-            let input = document.getElementById('inputSchedule').value;
-            input = input.replace(/\s*-\s*/g, '-'); // Remove spaces around hyphens
-            const timeRanges = input.match(/\d{1,2}h?\d{0,2}-\d{1,2}h?\d{0,2}/g) || [];
+  <script>
+    const linesContainer = document.getElementById('lines-container');
+    const addLineButton = document.getElementById('add-line');
+    const calculateButton = document.getElementById('calculate');
+    const clearButton = document.getElementById('clear');
+    const resultDiv = document.getElementById('result');
 
-            let totalHours = 0;
-            let resultText = '';
-            timeRanges.forEach(range => {
-                const hours = parseTimeRange(range);
-                resultText += `${range}, Hours: ${hours}\n`;
-                totalHours += hours;
-            });
-            resultText += `\nTotal Hours: ${totalHours}`;
-            
-            document.getElementById('result').innerText = resultText;
-        }
+    // Function to add a new line for hours and minutes input
+    function addLine() {
+      const line = document.createElement('div');
+      line.className = 'line';
+      line.innerHTML = `
+        <input type="number" class="hours" placeholder="Hours" min="0">
+        <input type="number" class="minutes" placeholder="Minutes" min="0" max="59">
+      `;
+      linesContainer.appendChild(line);
+    }
 
-        function copyToClipboard() {
-            const resultText = document.getElementById('result').innerText;
-            navigator.clipboard.writeText(resultText).then(() => {
-                alert('Result copied to clipboard');
-            });
-        }
-    </script>
+    // Add 7 initial lines
+    for (let i = 0; i < 7; i++) {
+      addLine();
+    }
+
+    // Event listener to add more lines
+    addLineButton.addEventListener('click', addLine);
+
+    // Event listener to calculate the total time
+    calculateButton.addEventListener('click', () => {
+      let totalHours = 0;
+      let totalMinutes = 0;
+
+      const hoursInputs = document.querySelectorAll('.hours');
+      const minutesInputs = document.querySelectorAll('.minutes');
+
+      hoursInputs.forEach((input, index) => {
+        const hours = parseInt(input.value) || 0;
+        const minutes = parseInt(minutesInputs[index].value) || 0;
+
+        totalHours += hours;
+        totalMinutes += minutes;
+      });
+
+      // Convert excess minutes to hours
+      totalHours += Math.floor(totalMinutes / 60);
+      totalMinutes = totalMinutes % 60;
+
+      resultDiv.textContent = `Total Time: ${totalHours} Hours, ${totalMinutes} Minutes`;
+    });
+
+    // Event listener to clear all inputs and reset the result
+    clearButton.addEventListener('click', () => {
+      const inputs = document.querySelectorAll('.hours, .minutes');
+      inputs.forEach(input => input.value = '');
+      resultDiv.textContent = 'Total Time: 0 Hours, 0 Minutes';
+    });
+  </script>
 </body>
 </html>
