@@ -24,22 +24,27 @@
     }
     .line {
       display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+    .line-title {
+      display: flex;
       justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
+      font-weight: bold;
+      margin-bottom: 5px;
     }
     .line input {
-      width: 40%;
+      width: 48%;
       padding: 8px;
       font-size: 16px;
       border: 1px solid #cccccc;
       border-radius: 5px;
     }
-    .line .line-result {
-      width: 20%;
-      text-align: center;
+    .line-result {
+      margin-top: 5px;
       font-size: 14px;
       color: #555555;
+      text-align: center;
     }
     .buttons {
       margin-top: 20px;
@@ -108,8 +113,15 @@
       const line = document.createElement('div');
       line.className = 'line';
       line.innerHTML = `
-        <input type="time" class="start-time" placeholder="Start Time">
-        <input type="time" class="end-time" placeholder="End Time">
+        <div class="line-title">
+          <span>Start</span>
+          <span>End</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <input type="time" class="start-time">
+          <input type="time" class="end-time">
+        </div>
+        <div class="line-result"></div>
       `;
       linesContainer.appendChild(line);
     }
@@ -157,7 +169,7 @@
           // Add to total
           totalMinutes += diffMinutes;
         } else {
-          resultLine.textContent = `Line ${index + 1}: 0 Hours, 0 Minutes`;
+          resultLine.textContent = `Line ${index + 1}: No valid time entered`;
         }
 
         individualResultsDiv.appendChild(resultLine);
