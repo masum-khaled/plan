@@ -74,12 +74,26 @@
       background-color: #FFC107;
       color: black;
       display: none; /* Initially hidden */
+      margin-top: 20px; /* Space above the copy button */
+      float: right; /* Align to the right */
+    }
+    .result-container {
+      margin-top: 30px; /* Space above results */
+      margin-bottom: 30px; /* Space below results */
     }
     .result {
-      margin-top: 20px;
       font-size: 18px;
       text-align: center;
       color: #333333;
+    }
+    footer {
+      margin-top: 40px; /* Space above footer */
+      background-color: #FF6F61; /* Soft red background */
+      text-align: center;
+      padding: 10px 0;
+      color: white;
+      font-size: 14px;
+      border-radius: 5px;
     }
   </style>
 </head>
@@ -94,10 +108,16 @@
       <button id="calculate">Calculate</button>
       <button id="clear">Clear</button>
     </div>
-    <div id="individual-results"></div>
-    <div class="result" id="result">Total Time: 0 Hours, 0 Minutes</div>
+    <div class="result-container">
+      <div id="individual-results"></div>
+      <div class="result" id="result">Total Time: 0 Hours, 0 Minutes</div>
+    </div>
     <button id="copy">Copy Results</button>
   </div>
+
+  <footer>
+    Created by Masum Khaled
+  </footer>
 
   <script>
     const linesContainer = document.getElementById('lines-container');
