@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hours Calculator</title>
+  <title>Hours Range Calculator</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
     }
     .container {
-      max-width: 500px;
+      max-width: 600px;
       margin: 0 auto;
     }
     .line {
@@ -42,7 +42,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Hours Calculator</h1>
+    <h1>Hours Range Calculator</h1>
     <div id="lines-container">
       <!-- Initial lines will be added here -->
     </div>
@@ -61,13 +61,13 @@
     const clearButton = document.getElementById('clear');
     const resultDiv = document.getElementById('result');
 
-    // Function to add a new line for hours and minutes input
+    // Function to add a new line for start and end time input
     function addLine() {
       const line = document.createElement('div');
       line.className = 'line';
       line.innerHTML = `
-        <input type="number" class="hours" placeholder="Hours" min="0">
-        <input type="number" class="minutes" placeholder="Minutes" min="0" max="59">
+        <input type="time" class="start-time">
+        <input type="time" class="end-time">
       `;
       linesContainer.appendChild(line);
     }
@@ -82,30 +82,41 @@
 
     // Event listener to calculate the total time
     calculateButton.addEventListener('click', () => {
-      let totalHours = 0;
       let totalMinutes = 0;
 
-      const hoursInputs = document.querySelectorAll('.hours');
-      const minutesInputs = document.querySelectorAll('.minutes');
+      const startTimeInputs = document.querySelectorAll('.start-time');
+      const endTimeInputs = document.querySelectorAll('.end-time');
 
-      hoursInputs.forEach((input, index) => {
-        const hours = parseInt(input.value) || 0;
-        const minutes = parseInt(minutesInputs[index].value) || 0;
+      startTimeInputs.forEach((startInput, index) => {
+        const endInput = endTimeInputs[index];
 
-        totalHours += hours;
-        totalMinutes += minutes;
+        if (startInput.value && endInput.value) {
+          const [startHours, startMinutes] = startInput.value.split(':').map(Number);
+          const [endHours, endMinutes] = endInput.value.split(':').map(Number);
+
+          // Calculate the time difference in minutes
+          const startTotalMinutes = startHours * 60 + startMinutes;
+          const endTotalMinutes = endHours * 60 + endMinutes;
+
+          // Add the difference to totalMinutes (handles crossing midnight)
+          if (endTotalMinutes >= startTotalMinutes) {
+            totalMinutes += endTotalMinutes - startTotalMinutes;
+          } else {
+            totalMinutes += (24 * 60 - startTotalMinutes) + endTotalMinutes;
+          }
+        }
       });
 
-      // Convert excess minutes to hours
-      totalHours += Math.floor(totalMinutes / 60);
-      totalMinutes = totalMinutes % 60;
+      // Convert total minutes to hours and minutes
+      const totalHours = Math.floor(totalMinutes / 60);
+      const remainingMinutes = totalMinutes % 60;
 
-      resultDiv.textContent = `Total Time: ${totalHours} Hours, ${totalMinutes} Minutes`;
+      resultDiv.textContent = `Total Time: ${totalHours} Hours, ${remainingMinutes} Minutes`;
     });
 
     // Event listener to clear all inputs and reset the result
     clearButton.addEventListener('click', () => {
-      const inputs = document.querySelectorAll('.hours, .minutes');
+      const inputs = document.querySelectorAll('.start-time, .end-time');
       inputs.forEach(input => input.value = '');
       resultDiv.textContent = 'Total Time: 0 Hours, 0 Minutes';
     });
