@@ -74,8 +74,7 @@
       background-color: #FFC107;
       color: black;
       display: none; /* Initially hidden */
-      margin-top: 20px; /* Space above the copy button */
-      float: right; /* Align to the right */
+      margin-top: 20px;
     }
     .result-container {
       margin-top: 30px; /* Space above results */
@@ -85,6 +84,9 @@
       font-size: 18px;
       text-align: center;
       color: #333333;
+    }
+    .result-wrapper {
+      text-align: right; /* Aligns copy button */
     }
     footer {
       margin-top: 40px; /* Space above footer */
@@ -111,8 +113,10 @@
     <div class="result-container">
       <div id="individual-results"></div>
       <div class="result" id="result">Total Time: 0 Hours, 0 Minutes</div>
+      <div class="result-wrapper">
+        <button id="copy">Copy Results</button>
+      </div>
     </div>
-    <button id="copy">Copy Results</button>
   </div>
 
   <footer>
@@ -137,7 +141,7 @@
           <span>Start</span>
           <span>End</span>
         </div>
-        <div style="display: flex; justify-content: space-between;">
+        <div style="display: flex; justify-content: space-between; gap: 10px;">
           <input type="time" class="start-time">
           <input type="time" class="end-time">
         </div>
@@ -227,7 +231,7 @@
 
     // Event listener to copy results to clipboard
     copyButton.addEventListener('click', () => {
-      let text = 'Individual Results:\n';
+      let text = 'Results:\n';
       const individualResults = individualResultsDiv.textContent;
       text += individualResults;
       text += `\n${resultDiv.textContent}`;
