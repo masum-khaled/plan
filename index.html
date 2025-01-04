@@ -47,6 +47,7 @@
         .tab-content {
             display: none;
             width: 100%;
+            max-width: 800px;
         }
 
         .tab-content.active {
@@ -54,16 +55,65 @@
         }
 
         .container {
-            max-width: 600px;
+            width: 100%;
             padding: 20px;
             background-color: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
+            margin-bottom: 20px;
         }
 
-        footer {
+        textarea {
             width: 100%;
-            background-color: gray;
+            height: 100px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .result {
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .copy-btn {
+            display: none;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .copy-btn:hover {
+            background-color: #218838;
+        }
+
+        .footer {
+            width: 100%;
+            background-color: red;
             color: white;
             text-align: center;
             padding: 15px;
@@ -72,16 +122,19 @@
             bottom: 0;
             left: 0;
             right: 0;
-            border-radius: 0 0;
+            border-radius: 0 0 8px 8px;
         }
-        footer a {
+
+        .footer a {
             color: white;
             text-decoration: none;
             font-weight: bold;
         }
-        footer a:hover {
+
+        .footer a:hover {
             text-decoration: underline;
         }
+
     </style>
 </head>
 <body>
@@ -124,9 +177,10 @@
         </div>
     </div>
 
-    <footer>
+    <!-- Footer -->
+    <div class="footer">
         Created by <a href="https://www.linkedin.com/in/masumkhaled" target="_blank">Masum Khaled</a>
-    </footer>
+    </div>
 
     <script>
         // Tabs functionality
@@ -149,7 +203,7 @@
             autoCalculator.classList.remove('active');
         });
 
-        // Auto Calculator functions (from the second calculator code you provided)
+        // Auto Calculator functions
         function parseTime(time) {
             if (time === '00h' || time === '00:00') {
                 return 24 * 60; // Treat 00h or 00:00 as 24h
@@ -199,7 +253,7 @@
             });
         }
 
-        // Manual Calculator functions (keeping your original code)
+        // Manual Calculator functions
         let lineCount = 1;
 
         // Add new line input fields
