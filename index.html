@@ -8,35 +8,72 @@
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
+      background-color: #f4f4f9;
     }
     .container {
-      max-width: 600px;
+      max-width: 700px;
       margin: 0 auto;
+      padding: 20px;
+      background: #ffffff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+    }
+    h1 {
+      text-align: center;
+      color: #333333;
     }
     .line {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       margin-bottom: 10px;
     }
     .line input {
-      width: 45%;
-      padding: 5px;
+      width: 40%;
+      padding: 8px;
       font-size: 16px;
+      border: 1px solid #cccccc;
+      border-radius: 5px;
+    }
+    .line .line-result {
+      width: 20%;
+      text-align: center;
+      font-size: 14px;
+      color: #555555;
     }
     .buttons {
       margin-top: 20px;
       display: flex;
       justify-content: space-between;
     }
-    .result {
-      margin-top: 20px;
-      font-size: 20px;
-      text-align: center;
-    }
     button {
-      padding: 10px 15px;
+      padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
+      border: none;
+      border-radius: 5px;
+    }
+    button#add-line {
+      background-color: #4CAF50;
+      color: white;
+    }
+    button#calculate {
+      background-color: #007BFF;
+      color: white;
+    }
+    button#clear {
+      background-color: #FF4C4C;
+      color: white;
+    }
+    button#copy {
+      background-color: #FFC107;
+      color: black;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      text-align: center;
+      color: #333333;
     }
   </style>
 </head>
@@ -50,6 +87,7 @@
     <div class="buttons">
       <button id="calculate">Calculate</button>
       <button id="clear">Clear</button>
+      <button id="copy">Copy Results</button>
     </div>
     <div class="result" id="result">Total Time: 0 Hours, 0 Minutes</div>
   </div>
@@ -59,6 +97,7 @@
     const addLineButton = document.getElementById('add-line');
     const calculateButton = document.getElementById('calculate');
     const clearButton = document.getElementById('clear');
+    const copyButton = document.getElementById('copy');
     const resultDiv = document.getElementById('result');
 
     // Function to add a new line for start and end time input
@@ -66,8 +105,9 @@
       const line = document.createElement('div');
       line.className = 'line';
       line.innerHTML = `
-        <input type="time" class="start-time">
-        <input type="time" class="end-time">
+        <input type="time" class="start-time" placeholder="Start Time">
+        <input type="time" class="end-time" placeholder="End Time">
+        <div class="line-result">0 Hours, 0 Minutes</div>
       `;
       linesContainer.appendChild(line);
     }
@@ -86,9 +126,11 @@
 
       const startTimeInputs = document.querySelectorAll('.start-time');
       const endTimeInputs = document.querySelectorAll('.end-time');
+      const lineResults = document.querySelectorAll('.line-result');
 
       startTimeInputs.forEach((startInput, index) => {
         const endInput = endTimeInputs[index];
+        const resultDiv = lineResults[index];
 
         if (startInput.value && endInput.value) {
           const [startHours, startMinutes] = startInput.value.split(':').map(Number);
@@ -98,12 +140,22 @@
           const startTotalMinutes = startHours * 60 + startMinutes;
           const endTotalMinutes = endHours * 60 + endMinutes;
 
-          // Add the difference to totalMinutes (handles crossing midnight)
+          let diffMinutes;
           if (endTotalMinutes >= startTotalMinutes) {
-            totalMinutes += endTotalMinutes - startTotalMinutes;
+            diffMinutes = endTotalMinutes - startTotalMinutes;
           } else {
-            totalMinutes += (24 * 60 - startTotalMinutes) + endTotalMinutes;
+            diffMinutes = (24 * 60 - startTotalMinutes) + endTotalMinutes;
           }
+
+          // Update individual line result
+          const hours = Math.floor(diffMinutes / 60);
+          const minutes = diffMinutes % 60;
+          resultDiv.textContent = `${hours} Hours, ${minutes} Minutes`;
+
+          // Add to total
+          totalMinutes += diffMinutes;
+        } else {
+          resultDiv.textContent = `0 Hours, 0 Minutes`;
         }
       });
 
@@ -117,8 +169,25 @@
     // Event listener to clear all inputs and reset the result
     clearButton.addEventListener('click', () => {
       const inputs = document.querySelectorAll('.start-time, .end-time');
+      const lineResults = document.querySelectorAll('.line-result');
       inputs.forEach(input => input.value = '');
+      lineResults.forEach(result => result.textContent = `0 Hours, 0 Minutes`);
       resultDiv.textContent = 'Total Time: 0 Hours, 0 Minutes';
+    });
+
+    // Event listener to copy results to clipboard
+    copyButton.addEventListener('click', () => {
+      let text = 'Individual Results:\n';
+      const lineResults = document.querySelectorAll('.line-result');
+      lineResults.forEach((result, index) => {
+        text += `Line ${index + 1}: ${result.textContent}\n`;
+      });
+      text += `\n${resultDiv.textContent}`;
+
+      // Copy to clipboard
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Results copied to clipboard!');
+      });
     });
   </script>
 </body>
