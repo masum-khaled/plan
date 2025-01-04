@@ -134,6 +134,13 @@
     // Event listener to add more lines
     addLineButton.addEventListener('click', addLine);
 
+    // Convert number to ordinal (1 -> 1st, 2 -> 2nd, etc.)
+    function toOrdinal(n) {
+      const s = ["th", "st", "nd", "rd"];
+      const v = n % 100;
+      return n + (s[(v - 20) % 10] || s[v] || s[0]);
+    }
+
     // Event listener to calculate the total time
     calculateButton.addEventListener('click', () => {
       let totalMinutes = 0;
@@ -161,18 +168,18 @@
             diffMinutes = (24 * 60 - startTotalMinutes) + endTotalMinutes;
           }
 
-          // Update individual line result
-          const hours = Math.floor(diffMinutes / 60);
-          const minutes = diffMinutes % 60;
-          resultLine.textContent = `Line ${index + 1}: ${hours} Hours, ${minutes} Minutes`;
+          // If the result is not 0, add it to the results
+          if (diffMinutes > 0) {
+            const hours = Math.floor(diffMinutes / 60);
+            const minutes = diffMinutes % 60;
+            resultLine.textContent = `${toOrdinal(index + 1)}: ${hours} Hours, ${minutes} Minutes`;
 
-          // Add to total
-          totalMinutes += diffMinutes;
-        } else {
-          resultLine.textContent = `Line ${index + 1}: No valid time entered`;
+            // Add to total
+            totalMinutes += diffMinutes;
+
+            individualResultsDiv.appendChild(resultLine);
+          }
         }
-
-        individualResultsDiv.appendChild(resultLine);
       });
 
       // Convert total minutes to hours and minutes
@@ -181,8 +188,12 @@
 
       resultDiv.textContent = `Total Time: ${totalHours} Hours, ${remainingMinutes} Minutes`;
 
-      // Show the copy button
-      copyButton.style.display = 'block';
+      // Show the copy button if there are results
+      if (individualResultsDiv.children.length > 0) {
+        copyButton.style.display = 'block';
+      } else {
+        copyButton.style.display = 'none';
+      }
     });
 
     // Event listener to clear all inputs and reset the result
