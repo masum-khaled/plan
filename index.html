@@ -1,248 +1,247 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hours Calculator</title>
-    <!-- Include flatpickr CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f0f4f8;
-            color: #333;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-        }
-
-        /* Tab styling */
-        .tabs {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .tab-button {
-            padding: 12px 20px;
-            margin: 0 10px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 4px 4px 0 0;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-        }
-
-        .tab-button:hover {
-            background-color: #0056b3;
-        }
-
-        .tab-button.active {
-            background-color: #0056b3;
-        }
-
-        .tab-content {
-            display: none;
-            width: 100%;
-            max-width: 800px;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .container {
-            width: 100%;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 15px;
-        }
-
-        label {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        input[type="text"] {
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            margin-bottom: 5px;
-            box-sizing: border-box;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
-            transition: background-color 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .result {
-            margin-top: 10px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        .copy-btn {
-            display: none;
-            margin-top: 10px;
-            padding: 10px 20px;
-            background-color: #28a745;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .copy-btn:hover {
-            background-color: #218838;
-        }
-
-        .footer {
-            width: 100%;
-            background-color: red;
-            color: white;
-            text-align: center;
-            padding: 15px;
-            font-size: 14px;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            border-radius: 0 0 8px 8px;
-        }
-
-        .footer a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hours Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f4f4f9;
+    }
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #ffffff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+    }
+    h1 {
+      text-align: center;
+      color: #333333;
+    }
+    .line {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px;
+    }
+    .line-title {
+      display: flex;
+      justify-content: space-between;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    .line input {
+      width: 48%;
+      padding: 8px;
+      font-size: 16px;
+      border: 1px solid #cccccc;
+      border-radius: 5px;
+    }
+    .line-result {
+      margin-top: 5px;
+      font-size: 14px;
+      color: #555555;
+      text-align: center;
+    }
+    .buttons {
+      margin-top: 20px;
+      display: flex;
+      justify-content: space-between;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+    }
+    button#add-line {
+      background-color: #4CAF50;
+      color: white;
+    }
+    button#calculate {
+      background-color: #007BFF;
+      color: white;
+    }
+    button#clear {
+      background-color: #FF4C4C;
+      color: white;
+    }
+    button#copy {
+      background-color: #FFC107;
+      color: black;
+      display: none; /* Initially hidden */
+      margin-top: 20px;
+    }
+    .result-container {
+      margin-top: 30px; /* Space above results */
+      margin-bottom: 30px; /* Space below results */
+    }
+    .result {
+      font-size: 18px;
+      text-align: center;
+      color: #333333;
+    }
+    .result-wrapper {
+      text-align: right; /* Aligns copy button */
+    }
+    footer {
+      margin-top: 40px; /* Space above footer */
+      background-color: #FF6F61; /* Soft red background */
+      text-align: center;
+      padding: 10px 0;
+      color: white;
+      font-size: 14px;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
-    <!-- Tabs for switching between calculators -->
-    <div class="tabs">
-        <button class="tab-button active" id="autoTab">Auto Calcul</button>
-        <button class="tab-button" id="manualTab">Manual</button>
+  <div class="container">
+    <h1>Hours Range Calculator</h1>
+    <div id="lines-container">
+      <!-- Initial lines will be added here -->
     </div>
+    <button id="add-line">+ Add More Lines</button>
+    <div class="buttons">
+      <button id="calculate">Calculate</button>
+      <button id="clear">Clear</button>
+    </div>
+    <div class="result-container">
+      <div id="individual-results"></div>
+      <div class="result" id="result">Total Time: 0 Hours, 0 Minutes</div>
+      <div class="result-wrapper">
+        <button id="copy">Copy Results</button>
+      </div>
+    </div>
+  </div>
 
-    <!-- Auto Calculator Content (default active) -->
-    <div class="tab-content active" id="autoCalculator">
-        <div class="container">
-            <h1>Auto Hours Calculator</h1>
-            <textarea id="inputSchedule" placeholder="Paste your schedule here"></textarea>
-            <button onclick="calculateHours()">Calculate Total Hours</button>
-            <div class="result" id="result"></div>
-            <button class="copy-btn" id="copyBtn" onclick="copyToClipboard()">Copy Result</button>
+  <footer>
+    Created by Masum Khaled
+  </footer>
+
+  <script>
+    const linesContainer = document.getElementById('lines-container');
+    const addLineButton = document.getElementById('add-line');
+    const calculateButton = document.getElementById('calculate');
+    const clearButton = document.getElementById('clear');
+    const copyButton = document.getElementById('copy');
+    const resultDiv = document.getElementById('result');
+    const individualResultsDiv = document.getElementById('individual-results');
+
+    // Function to add a new line for start and end time input
+    function addLine() {
+      const line = document.createElement('div');
+      line.className = 'line';
+      line.innerHTML = `
+        <div class="line-title">
+          <span>Start</span>
+          <span>End</span>
         </div>
-    </div>
-
-    <!-- Manual Calculator Content -->
-    <div class="tab-content" id="manualCalculator">
-        <div class="container">
-            <h1>Hours Range Calculator</h1>
-            <div id="lines-container">
-                <!-- Initial lines will be added here -->
-                <div class="input-group" id="line-1">
-                    <label for="start-time-1">Start Time</label>
-                    <input type="text" id="start-time-1" placeholder="Start Time">
-                    <label for="end-time-1">End Time</label>
-                    <input type="text" id="end-time-1" placeholder="End Time">
-                </div>
-            </div>
-            <button id="add-line">+ Add More Lines</button>
-            <div class="buttons">
-                <button id="calculate">Calculate</button>
-                <button id="clear">Clear</button>
-            </div>
-            <div class="result-container">
-                <div id="individual-results"></div>
-                <div class="result" id="result">Total Time: 0 Hours, 0 Minutes</div>
-                <div class="result-wrapper">
-                    <button id="copy">Copy Results</button>
-                </div>
-            </div>
+        <div style="display: flex; justify-content: space-between; gap: 10px;">
+          <input type="time" class="start-time">
+          <input type="time" class="end-time">
         </div>
-    </div>
+        <div class="line-result"></div>
+      `;
+      linesContainer.appendChild(line);
+    }
 
-    <!-- Footer -->
-    <div class="footer">
-        Created by <a href="https://www.linkedin.com/in/masumkhaled" target="_blank">Masum Khaled</a>
-    </div>
+    // Add 7 initial lines
+    for (let i = 0; i < 7; i++) {
+      addLine();
+    }
 
-    <!-- Include flatpickr JS -->
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script>
-        // Initialize flatpickr on the time input fields
-        flatpickr("#start-time-1", {
-            enableTime: true,
-            noCalendar: true,
-            dateFormat: "H:i", // Format as Hour:Minute
-        });
+    // Event listener to add more lines
+    addLineButton.addEventListener('click', addLine);
 
-        flatpickr("#end-time-1", {
-            enableTime: true,
-            noCalendar: true,
-            dateFormat: "H:i", // Format as Hour:Minute
-        });
+    // Convert number to ordinal (1 -> 1st, 2 -> 2nd, etc.)
+    function toOrdinal(n) {
+      const s = ["th", "st", "nd", "rd"];
+      const v = n % 100;
+      return n + (s[(v - 20) % 10] || s[v] || s[0]);
+    }
 
-        // Initialize for dynamically added input fields as well
-        document.getElementById('add-line').addEventListener('click', function() {
-            const lineCount = document.getElementsByClassName('input-group').length;
-            const lineDiv = document.createElement('div');
-            lineDiv.classList.add('input-group');
-            lineDiv.innerHTML = `
-                <label for="start-time-${lineCount + 1}">Start Time</label>
-                <input type="text" id="start-time-${lineCount + 1}" placeholder="Start Time">
-                <label for="end-time-${lineCount + 1}">End Time</label>
-                <input type="text" id="end-time-${lineCount + 1}" placeholder="End Time">
-            `;
-            document.getElementById('lines-container').appendChild(lineDiv);
+    // Event listener to calculate the total time
+    calculateButton.addEventListener('click', () => {
+      let totalMinutes = 0;
+      individualResultsDiv.innerHTML = ''; // Clear previous results
 
-            // Reinitialize flatpickr on the new inputs
-            flatpickr(`#start-time-${lineCount + 1}`, {
-                enableTime: true,
-                noCalendar: true,
-                dateFormat: "H:i",
-            });
+      const startTimeInputs = document.querySelectorAll('.start-time');
+      const endTimeInputs = document.querySelectorAll('.end-time');
 
-            flatpickr(`#end-time-${lineCount + 1}`, {
-                enableTime: true,
-                noCalendar: true,
-                dateFormat: "H:i",
-            });
-        });
+      startTimeInputs.forEach((startInput, index) => {
+        const endInput = endTimeInputs[index];
+        const resultLine = document.createElement('div');
 
-        // Other functions (calculate, copy, etc.) remain the same as before
-    </script>
+        if (startInput.value && endInput.value) {
+          const [startHours, startMinutes] = startInput.value.split(':').map(Number);
+          const [endHours, endMinutes] = endInput.value.split(':').map(Number);
+
+          // Calculate the time difference in minutes
+          const startTotalMinutes = startHours * 60 + startMinutes;
+          const endTotalMinutes = endHours * 60 + endMinutes;
+
+          let diffMinutes;
+          if (endTotalMinutes >= startTotalMinutes) {
+            diffMinutes = endTotalMinutes - startTotalMinutes;
+          } else {
+            diffMinutes = (24 * 60 - startTotalMinutes) + endTotalMinutes;
+          }
+
+          // If the result is not 0, add it to the results
+          if (diffMinutes > 0) {
+            const hours = Math.floor(diffMinutes / 60);
+            const minutes = diffMinutes % 60;
+            resultLine.textContent = `${toOrdinal(index + 1)}: ${hours} Hours, ${minutes} Minutes`;
+
+            // Add to total
+            totalMinutes += diffMinutes;
+
+            individualResultsDiv.appendChild(resultLine);
+          }
+        }
+      });
+
+      // Convert total minutes to hours and minutes
+      const totalHours = Math.floor(totalMinutes / 60);
+      const remainingMinutes = totalMinutes % 60;
+
+      resultDiv.textContent = `Total Time: ${totalHours} Hours, ${remainingMinutes} Minutes`;
+
+      // Show the copy button if there are results
+      if (individualResultsDiv.children.length > 0) {
+        copyButton.style.display = 'block';
+      } else {
+        copyButton.style.display = 'none';
+      }
+    });
+
+    // Event listener to clear all inputs and reset the result
+    clearButton.addEventListener('click', () => {
+      const inputs = document.querySelectorAll('.start-time, .end-time');
+      inputs.forEach(input => input.value = '');
+      individualResultsDiv.innerHTML = '';
+      resultDiv.textContent = 'Total Time: 0 Hours, 0 Minutes';
+      copyButton.style.display = 'none'; // Hide the copy button
+    });
+
+    // Event listener to copy results to clipboard
+    copyButton.addEventListener('click', () => {
+      let text = 'Results:\n';
+      const individualResults = individualResultsDiv.textContent;
+      text += individualResults;
+      text += `\n${resultDiv.textContent}`;
+
+      // Copy to clipboard
+      navigator.clipboard.writeText(text).then(() => {
+        alert('Results copied to clipboard!');
+      });
+    });
+  </script>
 </body>
 </html>
+
