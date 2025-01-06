@@ -55,6 +55,7 @@
         }
 
         textarea, input {
+            font-family: monospace;
             width: calc(100% - 22px);
             padding: 10px;
             margin: 10px 0;
@@ -195,7 +196,7 @@
             const totalEarnings = (totalHours * hourlyRate).toFixed(2);
             resultText += `\nTotal Hours: ${totalHours.toFixed(2)}`;
             if (hourlyRate > 0) {
-                resultText += `\nTotal Earnings: $${totalEarnings}`;
+                resultText += `\nTotal Earnings: ${totalEarnings}`;
             }
             
             document.getElementById('result').innerText = resultText;
