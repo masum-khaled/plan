@@ -5,19 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auto Hours Calculator</title>
     <style>
-         body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #f4f4f9;
-    }
-
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
         .menu-bar {
             display: flex;
             justify-content: center;
             background-color: #f4f4f4;
             padding: 10px 0;
         }
-
         .menu-bar a {
             text-decoration: none;
             color: #333;
@@ -28,18 +26,14 @@
             font-size: 16px;
             transition: all 0.3s ease;
         }
-
         .menu-bar a:hover {
             background-color: #ddd;
         }
-
         .menu-bar a.active {
             background-color: #007bff;
             color: white;
             border-color: #0056b3;
         }
-
-        
         .container {
             max-width: 700px;
             margin: 0 auto;
@@ -49,19 +43,21 @@
             border-radius: 10px;
         }
         h1 {
-            font-size:24px;
+            font-size: 24px;
             text-align: center;
             color: #333333;
         }
-        textarea {
+        textarea, input {
             width: calc(100% - 22px);
             padding: 10px;
             margin: 10px 0;
             border: 1px solid #ddd;
             border-radius: 4px;
+            font-size: 16px;
+        }
+        textarea {
             height: 150px;
             resize: none;
-            font-size: 16px;
         }
         button {
             width: 100%;
@@ -100,42 +96,43 @@
             background-color: #218838;
         }
         footer {
-      margin-top: 40px; /* Space above footer */
-      background-color: #FF6F61; /* Soft red background */
-      text-align: center;
-      padding: 10px 0;
-      color: white;
-      font-size: 14px;
-      border-radius: 5px;
-    }
+            margin-top: 40px;
+            background-color: #FF6F61;
+            text-align: center;
+            padding: 10px 0;
+            color: white;
+            font-size: 14px;
+            border-radius: 5px;
+        }
         footer>a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 600;
-}
-    footer>a:hover {
-    color: #007bff;
-}
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        footer>a:hover {
+            color: #007bff;
+        }
     </style>
 </head>
 <body>
-      <!-- Navigation Menu -->
     <div class="menu-bar">
         <a href="https://masum-khaled.github.io/planning/" class="menu-item" id="btn1">Manual</a>
         <a href="https://masum-khaled.github.io/planning/auto-calculator.html" class="menu-item" id="btn2">Auto</a>
     </div>
 
-    
     <div class="container">
         <h1>Auto Hours Calculator</h1>
         <textarea id="inputSchedule" placeholder="Paste your schedule here"></textarea>
+        <input type="number" id="hourlyRate" placeholder="Enter Hourly Rate" step="0.01" min="0">
         <button onclick="calculateHours()">Calculate Total Hours</button>
         <div class="result" id="result"></div>
         <button class="copy-btn" id="copyBtn" onclick="copyToClipboard()">Copy Result</button>
     </div>
+
     <footer>
         Created by <a href="https://www.linkedin.com/in/masumkhaled" target="_blank">Masum Khaled</a>
     </footer>
+
     <script>
         function parseTime(time) {
             if (time === '00h' || time === '00:00') {
@@ -163,6 +160,8 @@
 
         function calculateHours() {
             let input = document.getElementById('inputSchedule').value;
+            const hourlyRate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+
             input = input.replace(/\s+/g, ' ').trim(); // Normalize whitespace
             const timeRanges = input.match(/\d{1,2}[:h]?\d{0,2}(?:\s|-)\d{1,2}[:h]?\d{0,2}/g) || [];
 
@@ -173,8 +172,13 @@
                 resultText += `${range}, Hours: ${hours.toFixed(2)}\n`;
                 totalHours += hours;
             });
+
+            const totalEarnings = totalHours * hourlyRate;
             resultText += `\nTotal Hours: ${totalHours.toFixed(2)}`;
-            
+            if (hourlyRate > 0) {
+                resultText += `\nTotal Earnings: $${totalEarnings.toFixed(2)}`;
+            }
+
             document.getElementById('result').innerText = resultText;
             document.getElementById('copyBtn').style.display = 'block'; // Show the copy button
         }
@@ -186,7 +190,6 @@
             });
         }
 
-        // Highlight the active button based on the current URL
         const buttons = document.querySelectorAll('.menu-item');
         buttons.forEach(button => {
             if (button.href === window.location.href) {
