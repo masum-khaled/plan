@@ -16,6 +16,36 @@
             height: 100vh;
             margin: 0;
         }
+
+        .menu-bar {
+            display: flex;
+            justify-content: center;
+            background-color: #f4f4f4;
+            padding: 10px 0;
+        }
+
+        .menu-bar a {
+            text-decoration: none;
+            color: #333;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border: 2px solid transparent;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-bar a:hover {
+            background-color: #ddd;
+        }
+
+        .menu-bar a.active {
+            background-color: #007bff;
+            color: white;
+            border-color: #0056b3;
+        }
+
+        
         .container {
             max-width: 600px;
             padding: 20px;
@@ -98,12 +128,10 @@
 </head>
 <body>
       <!-- Navigation Menu -->
-<nav style="background-color: #007BFF; padding: 10px 0;">
-  <div style="max-width: 1000px; margin: 0 auto; display: flex; justify-content: space-around; align-items: center;">
-    <a href="https://masum-khaled.github.io/plan" style="color: white; text-decoration: none; font-size: 18px;">Auto Hours Calculator</a>
-    <a href="https://masum-khaled.github.io/plan/manual-calculator.html" style="color: white; text-decoration: none; font-size: 18px;">Hours Range Calculator</a>
-  </div>
-</nav>
+    <div class="menu-bar">
+        <a href="https://example.com/page1" class="menu-item" id="btn1">Button 1</a>
+        <a href="https://example.com/page2" class="menu-item" id="btn2">Button 2</a>
+    </div>
 
     
     <div class="container">
@@ -165,6 +193,14 @@
                 alert('Result copied to clipboard');
             });
         }
+
+        // Highlight the active button based on the current URL
+        const buttons = document.querySelectorAll('.menu-item');
+        buttons.forEach(button => {
+            if (button.href === window.location.href) {
+                button.classList.add('active');
+            }
+        });
     </script>
 </body>
 </html>
