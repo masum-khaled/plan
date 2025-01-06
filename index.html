@@ -269,7 +269,7 @@
       const hourlyRate = parseFloat(hourlyRateInput.value);
       if (!isNaN(hourlyRate) && hourlyRate > 0) {
         const totalAmount = (totalMinutes / 60) * hourlyRate;
-        totalAmountDiv.textContent = `Total Amount: $${totalAmount.toFixed(2)}`;
+        totalAmountDiv.textContent = `Total Amount: ${totalAmount.toFixed(2)}`;
       }
 
       copyButton.style.display = individualResultsDiv.children.length > 0 ? 'block' : 'none';
