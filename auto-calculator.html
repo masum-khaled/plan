@@ -176,7 +176,7 @@
             const totalEarnings = totalHours * hourlyRate;
             resultText += `\nTotal Hours: ${totalHours.toFixed(2)}`;
             if (hourlyRate > 0) {
-                resultText += `\nTotal Earnings: $${totalEarnings.toFixed(2)}`;
+                resultText += `\nTotal Earnings: ${totalEarnings.toFixed(2)}`;
             }
 
             document.getElementById('result').innerText = resultText;
