@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Hours Calculator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 600px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            text-align: center;
+            color: #007BFF;
+        }
+        textarea {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            height: 150px;
+            resize: none;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            text-align: left;
+            margin-top: 20px;
+            white-space: pre-wrap;
+            font-size: 16px;
+        }
+        .copy-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+            display: none;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+        .copy-btn:hover {
+            background-color: #218838;
+        }
+        footer {
+            width: 100%;
+            background-color: gray;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            border-radius: 0 0;
+        }
+        footer a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Auto Hours Calculator</h1>
+        <textarea id="inputSchedule" placeholder="Paste your schedule here"></textarea>
+        <button onclick="calculateHours()">Calculate Total Hours</button>
+        <div class="result" id="result"></div>
+        <button class="copy-btn" id="copyBtn" onclick="copyToClipboard()">Copy Result</button>
+    </div>
+    <footer>
+        Created by <a href="https://www.linkedin.com/in/masumkhaled" target="_blank">Masum Khaled</a>
+    </footer>
+    <script>
+        function parseTime(time) {
+            if (time === '00h' || time === '00:00') {
+                return 24 * 60; // Treat 00h or 00:00 as 24h
+            }
+            if (time.includes('h')) {
+                let [hours, minutes] = time.split('h').map(Number);
+                if (isNaN(minutes)) minutes = 0;
+                return hours * 60 + minutes;
+            } else {
+                const [hours, minutes] = time.split(':').map(Number);
+                return hours * 60 + minutes;
+            }
+        }
+
+        function parseTimeRange(timeRange) {
+            const cleanedRange = timeRange.replace(/\s+/g, '-'); // Replace spaces with hyphens
+            const [start, end] = cleanedRange.split('-').map(parseTime);
+
+            // Handle cases where the end time is less than the start time (e.g., 17h30-00h30)
+            const adjustedEnd = end <= start ? end + 24 * 60 : end;
+
+            return (adjustedEnd - start) / 60;
+        }
+
+        function calculateHours() {
+            let input = document.getElementById('inputSchedule').value;
+            input = input.replace(/\s+/g, ' ').trim(); // Normalize whitespace
+            const timeRanges = input.match(/\d{1,2}[:h]?\d{0,2}(?:\s|-)\d{1,2}[:h]?\d{0,2}/g) || [];
+
+            let totalHours = 0;
+            let resultText = '';
+            timeRanges.forEach(range => {
+                const hours = parseTimeRange(range);
+                resultText += `${range}, Hours: ${hours.toFixed(2)}\n`;
+                totalHours += hours;
+            });
+            resultText += `\nTotal Hours: ${totalHours.toFixed(2)}`;
+            
+            document.getElementById('result').innerText = resultText;
+            document.getElementById('copyBtn').style.display = 'block'; // Show the copy button
+        }
+
+        function copyToClipboard() {
+            const resultText = document.getElementById('result').innerText;
+            navigator.clipboard.writeText(resultText).then(() => {
+                alert('Result copied to clipboard');
+            });
+        }
+    </script>
+</body>
+</html>
